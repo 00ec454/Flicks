@@ -1,6 +1,7 @@
 package com.dharmesh.flicks.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -14,7 +15,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.dharmesh.flicks.R;
+import com.dharmesh.flicks.activities.DetailActivity;
 import com.dharmesh.flicks.models.Movie;
+import com.google.gson.Gson;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
@@ -24,6 +27,7 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private Movie[] movies;
     private Context context;
     private boolean potraitMode = true;
+    //AIzaSyAMsT7EpgH_y8Vyg-n3xkkGSyfrdSMFuYU
 
     public MovieAdapter(Movie[] movies, Context context) {
         this.movies = movies;
@@ -57,6 +61,10 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             Picasso.with(context).load(imageUrl).into(holder1.ivPoster);
             holder1.tvDescription.setText(movie.getOverview());
             holder1.tvTitle.setText(movie.getTitle());
+            Intent intent = new Intent(context, DetailActivity.class);
+            intent.putExtra("movie", new Gson().toJson(movie));
+            holder1.itemView.setOnClickListener(view1 -> context.startActivity(intent));
+
         } else {
             final FiveStarMovieViewHolder holder1 = (FiveStarMovieViewHolder) holder;
             String imageUrl = "https://image.tmdb.org/t/p/w1280/" + movie.getBackdropPath();
@@ -64,14 +72,12 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 @Override
                 public void onSuccess() {
                     Bitmap bitmap = ((BitmapDrawable) holder1.ivPoster.getDrawable()).getBitmap(); // Ew!
-                    Palette.from(bitmap).generate(new Palette.PaletteAsyncListener() {
-                        public void onGenerated(Palette p) {
-                            Palette.Swatch vibrant = p.getVibrantSwatch();
-                            if(vibrant!=null) {
-                                int color = Color.argb(150, Color.red(vibrant.getRgb()), Color.green(vibrant.getRgb()), Color.blue(vibrant.getRgb()));
-                                holder1.tvTitle.setBackgroundColor(color);
-                                holder1.tvTitle.setTextColor(vibrant.getTitleTextColor());
-                            }
+                    Palette.from(bitmap).generate(p -> {
+                        Palette.Swatch vibrant = p.getVibrantSwatch();
+                        if(vibrant!=null) {
+                            int color = Color.argb(150, Color.red(vibrant.getRgb()), Color.green(vibrant.getRgb()), Color.blue(vibrant.getRgb()));
+                            holder1.tvTitle.setBackgroundColor(color);
+                            holder1.tvTitle.setTextColor(vibrant.getTitleTextColor());
                         }
                     });
                 }
