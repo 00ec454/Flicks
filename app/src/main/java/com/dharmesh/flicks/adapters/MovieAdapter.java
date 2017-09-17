@@ -59,7 +59,7 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             if (!potraitMode) {
                 imageUrl = "https://image.tmdb.org/t/p/w300/" + movie.getBackdropPath();
             }
-            Picasso.with(context).load(imageUrl).into(holder1.ivPoster);
+            Picasso.with(context).load(imageUrl).placeholder(R.drawable.paceholder).into(holder1.ivPoster);
             holder1.tvDescription.setText(movie.getOverview());
             holder1.tvTitle.setText(movie.getTitle());
             Intent intent = new Intent(context, DetailActivity.class);
@@ -69,7 +69,7 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         } else {
             final FiveStarMovieViewHolder holder1 = (FiveStarMovieViewHolder) holder;
             String imageUrl = "https://image.tmdb.org/t/p/w1280/" + movie.getBackdropPath();
-            Picasso.with(context).load(imageUrl).into(holder1.ivPoster, new Callback.EmptyCallback() {
+            Picasso.with(context).load(imageUrl).placeholder(R.drawable.paceholder).into(holder1.ivPoster, new Callback.EmptyCallback() {
                 @Override
                 public void onSuccess() {
                     Bitmap bitmap = ((BitmapDrawable) holder1.ivPoster.getDrawable()).getBitmap(); // Ew!
