@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.dharmesh.flicks.R;
 import com.dharmesh.flicks.activities.DetailActivity;
+import com.dharmesh.flicks.activities.TrailerActivity;
 import com.dharmesh.flicks.models.Movie;
 import com.google.gson.Gson;
 import com.squareup.picasso.Callback;
@@ -74,7 +75,7 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                     Bitmap bitmap = ((BitmapDrawable) holder1.ivPoster.getDrawable()).getBitmap(); // Ew!
                     Palette.from(bitmap).generate(p -> {
                         Palette.Swatch vibrant = p.getVibrantSwatch();
-                        if(vibrant!=null) {
+                        if (vibrant != null) {
                             int color = Color.argb(150, Color.red(vibrant.getRgb()), Color.green(vibrant.getRgb()), Color.blue(vibrant.getRgb()));
                             holder1.tvTitle.setBackgroundColor(color);
                             holder1.tvTitle.setTextColor(vibrant.getTitleTextColor());
@@ -84,6 +85,11 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             });
             holder1.tvDescription.setText(movie.getOverview());
             holder1.tvTitle.setText(movie.getTitle());
+            holder1.ivPlay.setOnClickListener(view -> {
+                Intent intent = new Intent(context, TrailerActivity.class);
+                intent.putExtra("MOVIE_ID", movie.getId());
+                context.startActivity(intent);
+            });
         }
     }
 
@@ -112,12 +118,14 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     class FiveStarMovieViewHolder extends RecyclerView.ViewHolder {
         ImageView ivPoster;
+        ImageView ivPlay;
         TextView tvTitle;
         TextView tvDescription;
 
         FiveStarMovieViewHolder(View view) {
             super(view);
             ivPoster = view.findViewById(R.id.ivPoster);
+            ivPlay = view.findViewById(R.id.ivPlay);
             tvTitle = view.findViewById(R.id.tvTitle);
             tvDescription = view.findViewById(R.id.tvDescription);
         }

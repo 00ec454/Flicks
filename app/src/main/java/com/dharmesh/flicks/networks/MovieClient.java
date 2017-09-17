@@ -12,6 +12,7 @@ public class MovieClient {
 
     private static final String API_KEY = "a07e22bc18f5cb106bfe4cc1f83ad8ed";
     private static final String MOVIES_ENDPOINT_URL = "https://api.themoviedb.org/3/movie/now_playing";
+    private static final String MOVIES_TRAILERS_ENDPOINT_URL = "https://api.themoviedb.org/3/movie/%s/videos";
     private static final String TAG = MovieClient.class.getSimpleName();
 
     public static void loadMovies(JsonHttpResponseHandler responseHandler) {
@@ -20,4 +21,12 @@ public class MovieClient {
         params.put("api_key", API_KEY);
         client.get(MOVIES_ENDPOINT_URL, params, responseHandler);
     }
+
+    public static void getTrailers(long movieId, JsonHttpResponseHandler responseHandler) {
+        AsyncHttpClient client = new AsyncHttpClient();
+        RequestParams params = new RequestParams();
+        params.put("api_key", API_KEY);
+        client.get(String.format(MOVIES_TRAILERS_ENDPOINT_URL, movieId), params, responseHandler);
+    }
+
 }

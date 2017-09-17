@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-            Log.i(TAG, "onFailure: " + errorResponse);
+            Log.e(TAG, errorResponse.toString());
         }
 
         @Override
@@ -53,14 +53,11 @@ public class MainActivity extends AppCompatActivity {
 
                 JSONArray jsonArray = response.getJSONArray("results");
                 Movie[] movies = builder.create().fromJson(jsonArray.toString(), Movie[].class);
-                for(Movie movie: movies){
-                    Log.i(TAG, "onSuccess: "+movie);
-                }
                 MovieAdapter movieAdapter = new MovieAdapter(movies, getBaseContext());
                 rvMovies.setAdapter(movieAdapter);
 
             } catch (JSONException e) {
-                e.printStackTrace();
+                Log.e(TAG, e.getMessage(), e);
             }
         }
     };
